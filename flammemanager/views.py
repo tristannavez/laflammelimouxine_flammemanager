@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Client, Produit
+from .models import Client, Produit, Commande
+from .forms import CommandeForm
+
 
 # Create your views here.
 def add_client(request):
@@ -33,3 +35,16 @@ def list_produit(request):
     produits = Produit.objects.all()
     return render(request, 'list_produit.html', {'produits': produits})
 
+def add_commande(request):
+    if request.method == 'POST':
+        form = CommandeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('list_commande')
+    else:
+        form = CommandeForm()
+    return render(request, 'add_commande.html', {'form': form})
+
+def list_commande(request):
+    commandes = Commande.objects.all()
+    return render(request, 'list_commande.html', {'commandes': commandes})

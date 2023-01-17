@@ -1,0 +1,19 @@
+<table>
+    <tr>
+        <th>ID Commande</th>
+        <th>Client</th>
+        <th>Produits</th>
+        <th>Prix TTC</th>
+        <th>Etat de la commande</th>
+    </tr>
+    {% for commande in commandes %}
+    <tr>
+        <td>{{ commande.id_commande }}</td>
+        <td>{{ commande.client }}</td>
+        <td>{{ commande.produits.all }}</td>
+        <td>{{ commande.prix_ttc }}</td>
+        <td>{% if commande.commande %} Commandée {% else %} Non commandée {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
