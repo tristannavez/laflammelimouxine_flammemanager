@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib import admin
 
 class Client(models.Model):
     nom = models.CharField(max_length=200)

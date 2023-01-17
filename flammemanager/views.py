@@ -19,3 +19,17 @@ def list_client(request):
     clients = Client.objects.all()
     return render(request, 'list_client.html', {'clients': clients})
 
+
+def add_produit(request):
+    if request.method == 'POST':
+        nom = request.POST.get('nom')
+        produit = Produit(nom=nom)
+        produit.save()
+        return redirect('list_produit')
+    return render(request, 'add_produit.html')
+
+
+def list_produit(request):
+    produits = Produit.objects.all()
+    return render(request, 'list_produit.html', {'produits': produits})
+
