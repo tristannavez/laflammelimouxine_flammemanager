@@ -10,3 +10,5 @@ class Client(models.Model):
 class Produit(models.Model):
     nom = models.CharField(max_length=100)
 
+admin.site.register(Client)
+admin.site.register(Produit)
