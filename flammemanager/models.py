@@ -23,6 +23,14 @@ class Commande(models.Model):
     def __str__(self):
         return 'Commande n°'+self.id_commande+' de '+str(self.client)+' contenant : '+str([str(p) for p in self.produits.all()])
 
-admin.site.register(Client)
-admin.site.register(Produit)
-admin.site.register(Commande)
+class Livraison(models.Model):
+    ETAT_LIVRAISON = (
+        ('commandé', 'Commandé'),
+        ('en livraison', 'En Livraison'),
+        ('livré', 'Livré'),
+        ('complet', 'Complet'),
+    )
+    commande = models.ForeignKey(Commande, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    etat_livraison = models.CharField(max_length=20,choices=ETAT_LIVRAISON,default='commandé')
+    produit = models.ForeignKey(Produit, on_delete=models.CASCADE)
