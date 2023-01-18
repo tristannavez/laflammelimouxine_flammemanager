@@ -15,13 +15,12 @@ def create_livraison_on_commande(sender, instance, **kwargs):
 @receiver(post_save, sender=Livraison)
 def create_chantier_on_livraison(sender, instance, **kwargs):
     if instance.etat_livraison == 'complet':
-        chantier_client = Chantier.objects.filter(client=instance.commande.client, etat_chantier__in=['en attente', 'planifié'])
-        if chantier_client.exists():
-            chantier_client.first().livraisons.add(instance)
-        else:
+        livraisons_client = Livraison.objects.filter(commande__client=instance.commande.client)
+        client_livraisons_complet = all([livraison.etat_livraison == 'complet' for livraison in livraisons_client])
+        if client_livraisons_complet:
             new_chantier = Chantier.objects.create(
                 client=instance.commande.client,
                 etat_chantier='en attente'
             )
-            new_chantier.livraisons.set([instance])
+            new_chantier.livraisons.set(livraisons_client)
 
