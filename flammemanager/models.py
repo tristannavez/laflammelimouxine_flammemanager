@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib import admin
 
+
 class Client(models.Model):
     nom = models.CharField(max_length=200)
     adresse = models.CharField(max_length=200)
@@ -15,24 +16,25 @@ class Produit(models.Model):
         return self.nom
 
 class Commande(models.Model):
-    id_commande = models.CharField(max_length=100, unique=True)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     produits = models.ManyToManyField(Produit)
-    prix_ttc = models.DecimalField(max_digits=5, decimal_places=2)
-    commande = models.BooleanField(default=False)
+    prix_achat_ht = models.DecimalField(max_digits=10, decimal_places=2)
+    prix_vente_ht = models.DecimalField(max_digits=10, decimal_places=2)
+    etat_commande = models.CharField(max_length=20, choices=[('en attente', 'En attente'), ('terminé', 'Terminé')])
     def __str__(self):
-        return 'Commande n°'+self.id_commande+' pour '+str(self.client)+' contenant : '+str([str(p) for p in self.produits.all()])
+        return 'Commande pour '+str(self.client)+' contenant : '+str([str(p) for p in self.produits.all()])
 
 class Livraison(models.Model):
-    id_livraison = models.CharField(max_length=100, unique=True)
-    ETAT_LIVRAISON = (
-        ('commandé', 'Commandé'),
-        ('en livraison', 'En Livraison'),
-        ('livré', 'Livré'),
-        ('complet', 'Complet'),
-    )
-    commande = models.ForeignKey(Commande, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    etat_livraison = models.CharField(max_length=20,choices=ETAT_LIVRAISON,default='commandé')
+    commande = models.ForeignKey(Commande, on_delete=models.CASCADE)
+    etat_livraison = models.CharField(max_length=20, choices=[('commandé', 'Commandé'), ('en livraison', 'En Livraison'), ('livré', 'Livré'), ('complet', 'Complet')])
     def __str__(self):
-        return 'Livraison n°'+self.id_livraison+' pour '+str(self.client)+' contenant : '+str([str(p) for p in self.commande.produits.all()])
+        return 'Livraison pour ' + str(self.commande.client) + ' contenant : ' + str([str(p) for p in self.commande.produits.all()])
+class Chantier(models.Model):
+    livraisons = models.ManyToManyField(Livraison)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    etat_chantier = models.CharField(max_length=20, choices=[('en attente', 'En attente'), ('planifié', 'Planifié'), ('validé', 'Validé'), ('terminé', 'Terminé')])
+    def __str__(self):
+        return 'Chantier pour ' + str(self.client.nom)
+
+from . import signals
