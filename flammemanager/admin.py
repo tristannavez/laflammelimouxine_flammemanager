@@ -24,7 +24,7 @@ class CommandeAdmin(admin.ModelAdmin):
 
 class LivraisonAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'client', 'etat_livraison', 'commande')
-    list_filter = ('client', 'etat_livraison', 'commande')
+    list_filter = ('client', 'etat_livraison')
 
 class ChantierAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'client', 'etat_chantier')
