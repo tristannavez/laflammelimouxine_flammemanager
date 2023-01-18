@@ -15,15 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from flammemanager import views
 from flammemanager.admin import admin_site
 
 urlpatterns = [
     path('', admin_site.urls),
-    path('add_client/', views.add_client, name='add_client'),
-    path('list_client/', views.list_client, name='list_client'),
-    path('add_produit/', views.add_produit, name='add_produit'),
-    path('list_produit/', views.list_produit, name='list_produit'),
-    path('add_commande/', views.add_commande, name='add_commande'),
-    path('list_commande/', views.list_commande, name='list_commande'),
 ]
