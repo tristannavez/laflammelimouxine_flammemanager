@@ -13,8 +13,8 @@ admin_site.register(Commande)
 admin_site.register(Client)
 admin_site.register(Produit)
 admin_site.register(Livraison)
-admin_site.register(User)
-admin_site.register(Group)
+#admin_site.register(User)
+#admin_site.register(Group)
 
 
 # Register your models here.

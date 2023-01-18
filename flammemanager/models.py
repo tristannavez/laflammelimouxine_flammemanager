@@ -21,9 +21,10 @@ class Commande(models.Model):
     prix_ttc = models.DecimalField(max_digits=5, decimal_places=2)
     commande = models.BooleanField(default=False)
     def __str__(self):
-        return 'Commande n°'+self.id_commande+' de '+str(self.client)+' contenant : '+str([str(p) for p in self.produits.all()])
+        return 'Commande n°'+self.id_commande+' pour '+str(self.client)+' contenant : '+str([str(p) for p in self.produits.all()])
 
 class Livraison(models.Model):
+    id_livraison = models.CharField(max_length=100, unique=True)
     ETAT_LIVRAISON = (
         ('commandé', 'Commandé'),
         ('en livraison', 'En Livraison'),
@@ -33,4 +34,5 @@ class Livraison(models.Model):
     commande = models.ForeignKey(Commande, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     etat_livraison = models.CharField(max_length=20,choices=ETAT_LIVRAISON,default='commandé')
-    produit = models.ForeignKey(Produit, on_delete=models.CASCADE)
+    def __str__(self):
+        return 'Livraison n°'+self.id_livraison+' pour '+str(self.client)+' contenant : '+str([str(p) for p in self.commande.produits.all()])
