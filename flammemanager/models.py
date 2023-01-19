@@ -27,7 +27,7 @@ class Commande(models.Model):
 class Livraison(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     commande = models.ForeignKey(Commande, on_delete=models.CASCADE)
-    etat_livraison = models.CharField(max_length=20, choices=[('commandé', 'Commandé'), ('en livraison', 'En Livraison'), ('livré', 'Livré'), ('complet', 'Complet')])
+    etat_livraison = models.CharField(max_length=20, choices=[('commandé', 'Commandé'), ('livré', 'Livré'), ('complet', 'Complet')])
     def __str__(self):
         return 'Livraison pour ' + str(self.commande.client) + ' contenant : ' + str([str(p) for p in self.commande.produits.all()])
 class Chantier(models.Model):
@@ -36,5 +36,6 @@ class Chantier(models.Model):
     etat_chantier = models.CharField(max_length=20, choices=[('en attente', 'En attente'), ('planifié', 'Planifié'), ('validé', 'Validé'), ('terminé', 'Terminé')])
     def __str__(self):
         return 'Chantier pour ' + str(self.client.nom)
+
 
 from . import signals

@@ -12,9 +12,6 @@ admin_site.index_title = 'Bienvenue dans Flamme Manager'
 
 
 # Register your models here.
-
-
-
 class ClientAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'adresse', 'email', 'telephone')
 
@@ -26,9 +23,10 @@ class LivraisonAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'client', 'etat_livraison', 'commande')
     list_filter = ('client', 'etat_livraison')
 
+
 class ChantierAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'client', 'etat_chantier')
-    list_filter = ('client', 'etat_chantier')
+    list_filter = ('etat_chantier', 'client')
 
 
 admin_site.register(Client, ClientAdmin)
