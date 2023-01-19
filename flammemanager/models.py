@@ -7,6 +7,7 @@ class Client(models.Model):
     adresse = models.CharField(max_length=200)
     email = models.EmailField()
     telephone = models.CharField(max_length=20)
+    num_devis = models.CharField(max_length=20)
     def __str__(self):
         return self.nom
 
