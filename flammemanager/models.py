@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 from django.contrib import admin
 
 
@@ -29,6 +30,7 @@ class Livraison(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     commande = models.ForeignKey(Commande, on_delete=models.CASCADE)
     etat_livraison = models.CharField(max_length=20, choices=[('commandé', 'Commandé'), ('livré', 'Livré'), ('complet', 'Complet')])
+    date_reelle = models.DateField(default=date.today)
     def __str__(self):
         return 'Livraison pour ' + str(self.commande.client) + ' contenant : ' + str([str(p) for p in self.commande.produits.all()])
 class Chantier(models.Model):

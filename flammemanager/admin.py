@@ -20,8 +20,8 @@ class CommandeAdmin(admin.ModelAdmin):
     list_filter = ('client', 'etat_commande')
 
 class LivraisonAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'client', 'etat_livraison', 'commande')
-    list_filter = ('client', 'etat_livraison')
+    list_display = ('__str__', 'client', 'etat_livraison', 'commande', 'date_reelle')
+    list_filter = ('client', 'etat_livraison', 'date_reelle')
 
 
 class ChantierAdmin(admin.ModelAdmin):
