@@ -28,11 +28,15 @@ class ChantierAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'client', 'etat_chantier', 'nombre_de_jours', 'date_intervention', 'type_chantier')
     list_filter = ('etat_chantier', 'client', 'nombre_de_jours', 'date_intervention', 'type_chantier')
 
+class ProduitAdmin(admin.ModelAdmin):
+    list_display = ('nom', 'fournisseur')
+    list_filter = ('nom', 'fournisseur')
+
 
 admin_site.register(Client, ClientAdmin)
 admin_site.register(Commande, CommandeAdmin)
 admin_site.register(Livraison, LivraisonAdmin)
 admin_site.register(Chantier, ChantierAdmin)
-admin_site.register(Produit)
+admin_site.register(Produit, ProduitAdmin)
 admin_site.register(User)
 admin_site.register(Group)
