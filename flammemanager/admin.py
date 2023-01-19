@@ -25,8 +25,8 @@ class LivraisonAdmin(admin.ModelAdmin):
 
 
 class ChantierAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'client', 'etat_chantier', 'nombre_de_jours', 'date_intervention')
-    list_filter = ('etat_chantier', 'client', 'nombre_de_jours', 'date_intervention')
+    list_display = ('__str__', 'client', 'etat_chantier', 'nombre_de_jours', 'date_intervention', 'type_chantier')
+    list_filter = ('etat_chantier', 'client', 'nombre_de_jours', 'date_intervention', 'type_chantier')
 
 
 admin_site.register(Client, ClientAdmin)
