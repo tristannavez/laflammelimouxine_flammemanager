@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Commande, Livraison, Chantier
+from .models import Commande, Livraison, Chantier, Solde
 
 @receiver(post_save, sender=Commande)
 def create_livraison_on_commande(sender, instance, **kwargs):
@@ -24,3 +24,7 @@ def create_chantier_on_livraison(sender, instance, **kwargs):
             )
             new_chantier.livraisons.set(livraisons_client)
 
+@receiver(post_save, sender=Chantier)
+def create_solde(sender, instance, created, **kwargs):
+    if created or instance.etat_chantier == "terminé":
+        Solde.objects.create(chantier=instance, client=instance.client, etat_solde="en attente", id_facture=None)

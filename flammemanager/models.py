@@ -46,6 +46,16 @@ class Chantier(models.Model):
 
     def __str__(self):
         return 'Chantier pour ' + str(self.client.nom)
+class Solde(models.Model):
+    chantier = models.ForeignKey(Chantier, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    etat_solde = models.CharField(max_length=20, choices=[('en attente', 'En attente'), ('partiel', 'Partiel'), ('soldé', 'Soldé')])
+    id_facture = models.CharField(max_length=20, null=True, blank=True)
+    date_solde = models.DateField(default=date.today)
 
+    def __str__(self):
+        return 'Solde pour : ' + str(self.chantier)
+    def num_devis(self):
+        return self.client.num_devis
 
 from . import signals

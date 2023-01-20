@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User, Group
-from .models import Commande, Client, Produit, Livraison, Chantier
+from .models import Commande, Client, Produit, Livraison, Chantier, Solde
 
 admin_site = AdminSite(name='Mon Administration')
 admin_site.site_header = 'Flamme Manager'
@@ -88,11 +88,18 @@ class ProduitAdmin(admin.ModelAdmin):
     list_display = ('nom', 'fournisseur')
     list_filter = ('nom', 'fournisseur')
 
+class SoldeAdmin(admin.ModelAdmin):
+    list_display = ('__str__','chantier', 'client', 'etat_solde', 'id_facture', 'num_devis','date_solde')
+    list_filter = ('etat_solde','date_solde')
+    search_fields = ('client__nom',)
+    search_help_text = ("Rechercher un client")
+
 
 admin_site.register(Client, ClientAdmin)
 admin_site.register(Commande, CommandeAdmin)
 admin_site.register(Livraison, LivraisonAdmin)
 admin_site.register(Chantier, ChantierAdmin)
 admin_site.register(Produit, ProduitAdmin)
+admin_site.register(Solde, SoldeAdmin)
 admin_site.register(User)
 admin_site.register(Group)
