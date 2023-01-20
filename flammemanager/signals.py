@@ -25,6 +25,7 @@ def create_chantier_on_livraison(sender, instance, **kwargs):
             new_chantier.livraisons.set(livraisons_client)
 
 @receiver(post_save, sender=Chantier)
-def create_solde(sender, instance, created, **kwargs):
-    if created or instance.etat_chantier == "terminé":
-        Solde.objects.create(chantier=instance, client=instance.client, etat_solde="en attente", id_facture=None)
+def create_solde_on_chantier(sender, instance, **kwargs):
+    if instance.etat_chantier == "terminé" and instance.type_chantier != "intervention légère":
+        commande = Commande.objects.filter(client=instance.client).last()
+        Solde.objects.create(chantier=instance, client=instance.client, commande=commande, etat_solde="en attente", id_facture=None)

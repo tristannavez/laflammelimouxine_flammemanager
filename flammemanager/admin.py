@@ -13,13 +13,14 @@ admin_site.index_title = 'Bienvenue dans Flamme Manager'
 
 # Register your models here.
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'adresse', 'email', 'telephone', 'num_devis')
+    list_display = ('__str__', 'adresse', 'email', 'telephone')
 
 class CommandeAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'client', 'prix_achat_ht', 'prix_vente_ht', 'etat_commande')
-    list_filter = ('etat_commande', 'produits')
+    list_display = ('__str__', 'client', 'prix_achat_ht', 'prix_vente_ht', 'etat_commande', 'num_devis', 'date_entree', 'commentaire')
+    list_filter = ('etat_commande', 'produits', 'date_entree')
     search_fields = ('client__nom',)
     search_help_text = ("Rechercher un client")
+    exclude = ('date_entree',)
 
 class LivraisonEtatListFilter(admin.SimpleListFilter):
     title = 'Etat de la livraison'
@@ -46,10 +47,11 @@ class LivraisonEtatListFilter(admin.SimpleListFilter):
 
 
 class LivraisonAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'client', 'etat_livraison', 'commande', 'date_reelle')
-    list_filter = (LivraisonEtatListFilter,'client', 'date_reelle')
+    list_display = ('__str__', 'client', 'etat_livraison', 'commande', 'date_commande', 'commentaire')
+    list_filter = (LivraisonEtatListFilter, 'date_commande')
     search_fields = ('client__nom',)
     search_help_text = ("Rechercher un client")
+    exclude = ('commande',)
 
 
 class ChantierEtatListFilter(admin.SimpleListFilter):
@@ -79,8 +81,8 @@ class ChantierEtatListFilter(admin.SimpleListFilter):
             return queryset.filter(etat_chantier__in=['validé'])
 
 class ChantierAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'client', 'etat_chantier', 'nombre_de_jours', 'date_intervention', 'type_chantier')
-    list_filter = (ChantierEtatListFilter, 'nombre_de_jours', 'date_intervention', 'type_chantier')
+    list_display = ('__str__', 'client', 'etat_chantier', 'nombre_de_jours', 'date_intervention', 'type_chantier', 'commentaire', 'chantier_commencé')
+    list_filter = (ChantierEtatListFilter, 'nombre_de_jours', 'date_intervention', 'type_chantier', 'chantier_commencé')
     search_fields = ('client__nom',)
     search_help_text = ("Rechercher un client")
     exclude = ('livraisons',)
@@ -88,11 +90,42 @@ class ProduitAdmin(admin.ModelAdmin):
     list_display = ('nom', 'fournisseur')
     list_filter = ('nom', 'fournisseur')
 
+
+
+class SoldeEtatListFilter(admin.SimpleListFilter):
+    title = 'Etat du solde'
+    parameter_name = 'état'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('en_attente_partiel', 'En attente ou partiel'),
+            ('en_attente', 'En attente'),
+            ('partiel', 'Partiel'),
+            ('soldé', 'Soldé'),
+
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'en_attente_partiel':
+            return queryset.filter(etat_solde__in=['en attente', 'partiel'])
+        if self.value() == 'en_attente':
+            return queryset.filter(etat_solde__in=['en attente'])
+        if self.value() == 'partiel':
+            return queryset.filter(etat_solde__in=['partiel'])
+        if self.value() == 'soldé':
+            return queryset.filter(etat_solde__in=['soldé'])
+
+
+
 class SoldeAdmin(admin.ModelAdmin):
-    list_display = ('__str__','chantier', 'client', 'etat_solde', 'id_facture', 'num_devis','date_solde')
-    list_filter = ('etat_solde','date_solde')
+    list_display = ('__str__','chantier', 'client', 'etat_solde', 'id_facture', 'num_devis','prix_facture_ht','date_solde')
+    list_filter = (SoldeEtatListFilter,'etat_solde','date_solde')
     search_fields = ('client__nom',)
     search_help_text = ("Rechercher un client")
+    exclude = ('commande',)
+
+
+
 
 
 admin_site.register(Client, ClientAdmin)
