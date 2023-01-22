@@ -1,1 +1,1 @@
-web: gunicorn laflammelimouxine_flammemanager.wsgi --log-file -
+web: newrelic-admin run-program gunicorn mysite.wsgi
