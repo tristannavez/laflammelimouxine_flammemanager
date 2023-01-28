@@ -48,7 +48,7 @@ class LivraisonEtatListFilter(admin.SimpleListFilter):
 
 class LivraisonAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'client', 'etat_livraison', 'commande', 'date_commande', 'commentaire')
-    list_filter = (LivraisonEtatListFilter, 'date_commande')
+    list_filter = (LivraisonEtatListFilter, 'date_commande', 'commande__produits')
     search_fields = ('client__nom',)
     search_help_text = ("Rechercher un client")
     exclude = ('commande',)
