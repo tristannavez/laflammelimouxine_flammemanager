@@ -16,13 +16,14 @@ def create_livraison_on_commande(sender, instance, **kwargs):
 def create_chantier_on_livraison(sender, instance, **kwargs):
     if instance.etat_livraison == 'complet':
         livraisons_client = Livraison.objects.filter(commande__client=instance.commande.client)
-        client_livraisons_complet = all([livraison.etat_livraison == 'complet' for livraison in livraisons_client])
-        if client_livraisons_complet:
+        commandes_en_attente = Commande.objects.filter(client=instance.commande.client, etat_commande='en attente')
+        if not commandes_en_attente and all([livraison.etat_livraison == 'complet' for livraison in livraisons_client]):
             new_chantier = Chantier.objects.create(
                 client=instance.commande.client,
                 etat_chantier='en attente'
             )
             new_chantier.livraisons.set(livraisons_client)
+
 
 @receiver(post_save, sender=Chantier)
 def create_solde_on_chantier(sender, instance, **kwargs):
