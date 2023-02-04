@@ -57,7 +57,7 @@ class Chantier(models.Model):
 
 class Solde(models.Model):
     chantier = models.ForeignKey(Chantier, on_delete=models.CASCADE)
-    commande = models.ForeignKey(Commande, on_delete=models.CASCADE)
+    commande = models.ForeignKey(Commande, on_delete=models.CASCADE, null=True, blank=True)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     etat_solde = models.CharField(max_length=20, choices=[('en attente', 'En attente'), ('partiel', 'Partiel'), ('soldé', 'Soldé')])
     id_facture = models.CharField(max_length=20, null=True, blank=True)
@@ -67,6 +67,8 @@ class Solde(models.Model):
     def __str__(self):
         return 'Solde pour : ' + str(self.chantier)
     def num_devis(self):
-        return self.commande.num_devis
+        if self.commande is not None:
+            return self.commande.num_devis
+        return None
 
 from . import signals
