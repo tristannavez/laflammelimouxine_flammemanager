@@ -47,7 +47,7 @@ class LivraisonEtatListFilter(admin.SimpleListFilter):
 
 
 class LivraisonAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'client', 'etat_livraison', 'commande', 'date_commande', 'commentaire')
+    list_display = ('__str__', 'client', 'etat_livraison', 'date_commande', 'commentaire', 'num_devis')
     list_filter = (LivraisonEtatListFilter, 'commande__produits','date_commande')
     search_fields = ('client__nom',)
     search_help_text = ("Rechercher un client")
@@ -81,7 +81,7 @@ class ChantierEtatListFilter(admin.SimpleListFilter):
             return queryset.filter(etat_chantier__in=['validé'])
 
 class ChantierAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'client', 'etat_chantier', 'nombre_de_jours', 'date_intervention', 'type_chantier', 'commentaire', 'chantier_commencé')
+    list_display = ('__str__', 'client', 'etat_chantier', 'nombre_de_jours', 'date_intervention', 'type_chantier', 'commentaire', 'chantier_commencé', 'num_devis')
     list_filter = (ChantierEtatListFilter, 'nombre_de_jours', 'type_chantier', 'chantier_commencé','date_intervention')
     search_fields = ('client__nom',)
     search_help_text = ("Rechercher un client")

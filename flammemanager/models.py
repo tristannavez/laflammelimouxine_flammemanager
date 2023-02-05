@@ -40,6 +40,8 @@ class Livraison(models.Model):
     def __str__(self):
         return 'Livraison pour ' + str(self.commande.client) + ' contenant : ' + str([str(p) for p in self.commande.produits.all()])
 
+    def num_devis(self):
+        return self.commande.num_devis
     def commentaire(self):
         return self.commande.commentaire
 class Chantier(models.Model):
@@ -54,6 +56,11 @@ class Chantier(models.Model):
     def __str__(self):
         return 'Chantier pour ' + str(self.client.nom)
 
+    def num_devis(self):
+        livraison = self.livraisons.first()  # prendre la première livraison associée au chantier
+        if livraison:
+            return livraison.commande.num_devis
+        return ''
 
 class Solde(models.Model):
     chantier = models.ForeignKey(Chantier, on_delete=models.CASCADE)
