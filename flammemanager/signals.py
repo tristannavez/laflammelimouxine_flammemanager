@@ -22,7 +22,8 @@ def create_chantier_on_livraison(sender, instance, **kwargs):
                 client=instance.commande.client,
                 etat_chantier='en attente'
             )
-            new_chantier.save()
+            new_chantier.livraisons.set(livraisons_client)
+
 
 
 @receiver(post_save, sender=Chantier)
