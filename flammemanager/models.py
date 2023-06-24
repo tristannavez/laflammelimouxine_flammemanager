@@ -78,4 +78,26 @@ class Solde(models.Model):
             return self.commande.num_devis
         return None
 
+class PropositionCommerciale(models.Model):
+    STATUT_CHOICES = [
+        ('envoye', 'Envoyé'),
+        ('rappel', 'Rappelé'),
+        ('attente', 'En attente'),
+        ('auaide', 'Au aide'),
+        ('valide', 'Validé'),
+        ('perdu', 'Perdu'),
+    ]
+
+    client = models.ForeignKey('Client', on_delete=models.CASCADE)
+    date_envoi = models.DateField(default=date.today)
+    numero_devis = models.CharField(max_length=20)
+    type_proposition = models.CharField(max_length=100)
+    montant_ttc = models.DecimalField(max_digits=10, decimal_places=2)
+    statut = models.CharField(max_length=20, choices=STATUT_CHOICES)
+    commentaire = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Proposition {self.numero_devis} - {self.client}"
+
+
 from . import signals

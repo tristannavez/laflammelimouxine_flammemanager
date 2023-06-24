@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User, Group
-from .models import Commande, Client, Produit, Livraison, Chantier, Solde
+from .models import Commande, Client, Produit, Livraison, Chantier, Solde, PropositionCommerciale
 
 admin_site = AdminSite(name='Mon Administration')
 admin_site.site_header = 'Flamme Manager'
@@ -9,18 +9,19 @@ admin_site.site_title = 'Flamme Manager'
 admin_site.index_title = 'Bienvenue dans Flamme Manager'
 
 
-
-
 # Register your models here.
 class ClientAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'adresse', 'email', 'telephone')
 
+
 class CommandeAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'client', 'prix_achat_ht', 'prix_vente_ht', 'etat_commande', 'num_devis', 'date_entree', 'commentaire')
+    list_display = (
+    '__str__', 'client', 'prix_achat_ht', 'prix_vente_ht', 'etat_commande', 'num_devis', 'date_entree', 'commentaire')
     list_filter = ('etat_commande', 'produits', 'date_entree')
     search_fields = ('client__nom',)
     search_help_text = ("Rechercher un client")
     exclude = ('date_entree',)
+
 
 class LivraisonEtatListFilter(admin.SimpleListFilter):
     title = 'Etat de la livraison'
@@ -48,7 +49,7 @@ class LivraisonEtatListFilter(admin.SimpleListFilter):
 
 class LivraisonAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'client', 'etat_livraison', 'date_commande', 'commentaire', 'num_devis')
-    list_filter = (LivraisonEtatListFilter, 'commande__produits','date_commande')
+    list_filter = (LivraisonEtatListFilter, 'commande__produits', 'date_commande')
     search_fields = ('client__nom',)
     search_help_text = ("Rechercher un client")
     exclude = ('commande',)
@@ -80,16 +81,20 @@ class ChantierEtatListFilter(admin.SimpleListFilter):
         if self.value() == 'terminé':
             return queryset.filter(etat_chantier__in=['validé'])
 
+
 class ChantierAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'client', 'etat_chantier', 'nombre_de_jours', 'date_intervention', 'type_chantier', 'commentaire', 'chantier_commencé', 'num_devis')
-    list_filter = (ChantierEtatListFilter, 'nombre_de_jours', 'type_chantier', 'chantier_commencé','date_intervention')
+    list_display = (
+    '__str__', 'client', 'etat_chantier', 'nombre_de_jours', 'date_intervention', 'type_chantier', 'commentaire',
+    'chantier_commencé', 'num_devis')
+    list_filter = (ChantierEtatListFilter, 'nombre_de_jours', 'type_chantier', 'chantier_commencé', 'date_intervention')
     search_fields = ('client__nom',)
     search_help_text = ("Rechercher un client")
     exclude = ('livraisons',)
+
+
 class ProduitAdmin(admin.ModelAdmin):
     list_display = ('nom', 'fournisseur')
     list_filter = ('nom', 'fournisseur')
-
 
 
 class SoldeEtatListFilter(admin.SimpleListFilter):
@@ -116,16 +121,20 @@ class SoldeEtatListFilter(admin.SimpleListFilter):
             return queryset.filter(etat_solde__in=['soldé'])
 
 
-
 class SoldeAdmin(admin.ModelAdmin):
-    list_display = ('__str__','chantier', 'client', 'etat_solde', 'id_facture', 'num_devis','prix_facture_ht','date_solde')
-    list_filter = (SoldeEtatListFilter,'etat_solde','date_solde')
+    list_display = (
+    '__str__', 'chantier', 'client', 'etat_solde', 'id_facture', 'num_devis', 'prix_facture_ht', 'date_solde')
+    list_filter = (SoldeEtatListFilter, 'etat_solde', 'date_solde')
     search_fields = ('client__nom',)
     search_help_text = ("Rechercher un client")
     exclude = ('commande',)
 
 
-
+class PropositionCommercialeAdmin(admin.ModelAdmin):
+    list_display = ('client', 'date_envoi', 'numero_devis', 'type_proposition', 'montant_ttc', 'statut')
+    list_filter = ('statut',)
+    search_fields = ('client__nom', 'numero_devis')
+    search_help_text = ("Rechercher un client")
 
 
 admin_site.register(Client, ClientAdmin)
@@ -134,5 +143,6 @@ admin_site.register(Livraison, LivraisonAdmin)
 admin_site.register(Chantier, ChantierAdmin)
 admin_site.register(Produit, ProduitAdmin)
 admin_site.register(Solde, SoldeAdmin)
+admin_site.register(PropositionCommerciale, PropositionCommercialeAdmin)
 admin_site.register(User)
 admin_site.register(Group)
