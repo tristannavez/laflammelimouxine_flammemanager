@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User, Group
-from .models import Commande, Client, Produit, Livraison, Chantier, Solde, PropositionCommerciale
+from .models import Commande, Client, Produit, Livraison, Chantier, Solde, PropositionCommerciale, Echeancier
 
 admin_site = AdminSite(name='Mon Administration')
 admin_site.site_header = 'Flamme Manager'
@@ -137,6 +137,12 @@ class PropositionCommercialeAdmin(admin.ModelAdmin):
     search_help_text = ("Rechercher un client")
 
 
+class EcheancierAdmin(admin.ModelAdmin):
+    list_display = ('client', 'date_echeance', 'montant_total_ttc', 'montant_paye', 'statut')
+    list_filter = ('client', 'statut')
+    search_fields = ('client__nom', 'client__email', 'client__telephone')
+
+
 admin_site.register(Client, ClientAdmin)
 admin_site.register(Commande, CommandeAdmin)
 admin_site.register(Livraison, LivraisonAdmin)
@@ -144,5 +150,6 @@ admin_site.register(Chantier, ChantierAdmin)
 admin_site.register(Produit, ProduitAdmin)
 admin_site.register(Solde, SoldeAdmin)
 admin_site.register(PropositionCommerciale, PropositionCommercialeAdmin)
+admin_site.register(Echeancier, EcheancierAdmin)
 admin_site.register(User)
 admin_site.register(Group)
