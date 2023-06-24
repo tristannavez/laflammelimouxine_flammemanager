@@ -95,9 +95,25 @@ class PropositionCommerciale(models.Model):
     montant_ttc = models.DecimalField(max_digits=10, decimal_places=2)
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES)
     commentaire = models.TextField(blank=True, null=True)
-
     def __str__(self):
         return f"Proposition {self.numero_devis} - {self.client}"
 
+class Echeancier(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    date_echeance = models.DateField()
+    montant_total_ttc = models.DecimalField(max_digits=10, decimal_places=2)
+    montant_paye = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    statut = models.CharField(max_length=20, choices=[
+        ('en attente', 'En attente'),
+        ('partiellement payé', 'Partiellement payé'),
+        ('payé', 'Payé'),
+        ('en retard', 'En retard'),
+        ('annulé', 'Annulé')
+    ])
+    commentaire = models.TextField(blank=True)
+    facture_associee = models.FileField(upload_to='factures/', blank=True)
+
+    def __str__(self):
+        return f"Échéancier pour le client {self.client.nom}"
 
 from . import signals
