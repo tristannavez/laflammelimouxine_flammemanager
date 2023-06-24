@@ -1,5 +1,7 @@
+import admin_interface.models
 from django.contrib import admin
 from django.contrib.admin import AdminSite
+from admin_interface import *
 from django.contrib.auth.models import User, Group
 from .models import Commande, Client, Produit, Livraison, Chantier, Solde, PropositionCommerciale, Echeancier
 
@@ -142,6 +144,8 @@ class EcheancierAdmin(admin.ModelAdmin):
     list_filter = ('client', 'statut')
     search_fields = ('client__nom', 'client__email', 'client__telephone')
 
+class AdminTheme(admin.ModelAdmin):
+    list_display = ('name','active')
 
 admin_site.register(Client, ClientAdmin)
 admin_site.register(Commande, CommandeAdmin)
@@ -153,3 +157,4 @@ admin_site.register(PropositionCommerciale, PropositionCommercialeAdmin)
 admin_site.register(Echeancier, EcheancierAdmin)
 admin_site.register(User)
 admin_site.register(Group)
+admin_site.register(admin_interface.models.Theme, AdminTheme)
