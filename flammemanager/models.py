@@ -101,8 +101,15 @@ class PropositionCommerciale(models.Model):
         return f"Proposition {self.numero_devis} - {self.client}"
 
 class Echeancier(models.Model):
+
+    STATUT_CHOICES = [
+        ('virement', 'Virement'),
+        ('prelevement', 'Virement'),
+    ]
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    date_facture = models.DateField()
     date_echeance = models.DateField()
+    type_paiement = models.CharField(max_length=20, choices=STATUT_CHOICES)
     montant_total_ttc = models.DecimalField(max_digits=10, decimal_places=2)
     montant_paye = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     statut = models.CharField(max_length=20, choices=[
@@ -113,7 +120,6 @@ class Echeancier(models.Model):
         ('annulé', 'Annulé')
     ])
     commentaire = models.TextField(blank=True)
-    facture_associee = models.FileField(upload_to='factures/', blank=True)
 
     def __str__(self):
         return f"Échéancier pour le client {self.client.nom}"
