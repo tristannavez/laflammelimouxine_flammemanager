@@ -133,11 +133,11 @@ class SoldeAdmin(admin.ModelAdmin):
 
 
 class PropositionCommercialeAdmin(admin.ModelAdmin):
-    list_display = ('client', 'date_envoi', 'numero_devis', 'type_proposition', 'montant_ttc', 'statut')
+    list_display = ('client', 'date_devis', 'numero_devis', 'type_devis', 'montant_ht', 'statut', 'date_entree')
     list_filter = ('statut',)
     search_fields = ('client__nom', 'numero_devis')
     search_help_text = ("Rechercher un client")
-
+    exclude = ('date_entree',)
 
 class EcheancierAdmin(admin.ModelAdmin):
     list_display = ('client', 'date_echeance', 'montant_total_ttc', 'montant_paye', 'statut')
