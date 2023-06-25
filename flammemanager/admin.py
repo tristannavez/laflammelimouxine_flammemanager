@@ -20,7 +20,7 @@ class CommandeAdmin(admin.ModelAdmin):
     list_display = (
     '__str__', 'client', 'prix_achat_ht', 'prix_vente_ht', 'etat_commande', 'num_devis', 'date_entree', 'commentaire')
     list_filter = ('etat_commande', 'produits', 'date_entree')
-    search_fields = ('client__nom',)
+    search_fields = ('client__nom', 'client__email', 'client__telephone', 'num_devis')
     search_help_text = ("Rechercher un client")
     exclude = ('date_entree',)
 
@@ -52,7 +52,7 @@ class LivraisonEtatListFilter(admin.SimpleListFilter):
 class LivraisonAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'client', 'etat_livraison', 'date_commande', 'commentaire', 'num_devis')
     list_filter = (LivraisonEtatListFilter, 'commande__produits', 'date_commande')
-    search_fields = ('client__nom',)
+    search_fields = ('client__nom', 'client__email', 'client__telephone')
     search_help_text = ("Rechercher un client")
     exclude = ('commande',)
 
@@ -89,7 +89,7 @@ class ChantierAdmin(admin.ModelAdmin):
     '__str__', 'client', 'etat_chantier', 'nombre_de_jours', 'date_intervention', 'type_chantier', 'commentaire',
     'chantier_commencé', 'num_devis')
     list_filter = (ChantierEtatListFilter, 'nombre_de_jours', 'type_chantier', 'chantier_commencé', 'date_intervention')
-    search_fields = ('client__nom',)
+    search_fields = ('client__nom', 'client__email', 'client__telephone', 'num_devis')
     search_help_text = ("Rechercher un client")
     exclude = ('livraisons',)
 
@@ -127,7 +127,7 @@ class SoldeAdmin(admin.ModelAdmin):
     list_display = (
     '__str__', 'chantier', 'client', 'etat_solde', 'id_facture', 'num_devis', 'prix_facture_ht', 'date_solde')
     list_filter = (SoldeEtatListFilter, 'etat_solde', 'date_solde')
-    search_fields = ('client__nom',)
+    search_fields = ('client__nom', 'client__email', 'client__telephone', 'id_facture', 'num_devis')
     search_help_text = ("Rechercher un client")
     exclude = ('commande',)
 
@@ -135,13 +135,13 @@ class SoldeAdmin(admin.ModelAdmin):
 class PropositionCommercialeAdmin(admin.ModelAdmin):
     list_display = ('client', 'date_devis', 'numero_devis', 'type_devis', 'montant_ht', 'statut', 'date_entree')
     list_filter = ('statut',)
-    search_fields = ('client__nom', 'numero_devis')
+    search_fields = ('client__nom', 'client__email', 'client__telephone', 'numero_devis')
     search_help_text = ("Rechercher un client")
     exclude = ('date_entree',)
 
 class EcheancierAdmin(admin.ModelAdmin):
-    list_display = ('client', 'date_echeance', 'montant_total_ttc', 'montant_paye', 'statut')
-    list_filter = ('client', 'statut')
+    list_display = ('client', 'date_facture', 'date_echeance', 'type_paiement', 'montant_total_ttc', 'montant_paye', 'statut')
+    list_filter = ('client', 'statut', 'date_facture', 'date_echeance', 'type_paiement', 'statut')
     search_fields = ('client__nom', 'client__email', 'client__telephone')
 
 class AdminTheme(admin.ModelAdmin):
