@@ -89,12 +89,14 @@ class PropositionCommerciale(models.Model):
     ]
 
     client = models.ForeignKey('Client', on_delete=models.CASCADE)
-    date_envoi = models.DateField(default=date.today)
+    date_devis = models.DateField(default=date.today)
     numero_devis = models.CharField(max_length=20)
-    type_proposition = models.CharField(max_length=100)
-    montant_ttc = models.DecimalField(max_digits=10, decimal_places=2)
+    type_devis = models.CharField(max_length=100)
+    marque = models.CharField(max_length=100)
+    montant_ht = models.DecimalField(max_digits=10, decimal_places=2)
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES)
     commentaire = models.TextField(blank=True, null=True)
+    date_entree = models.DateField(default=date.today)
     def __str__(self):
         return f"Proposition {self.numero_devis} - {self.client}"
 
