@@ -165,7 +165,7 @@ class PropositioCommercialeEtatListFilter(admin.SimpleListFilter):
         if self.value() == 'perdu':
             return queryset.filter(statut__in=['perdu'])
 class PropositionCommercialeAdmin(admin.ModelAdmin):
-    list_display = ('client', 'date_devis', 'numero_devis', 'type_devis', 'montant_ht', 'statut', 'date_entree')
+    list_display = ('client', 'date_devis', 'numero_devis', 'type_devis', 'montant_ht', 'statut', 'date_entree', 'commentaire')
     list_filter = (PropositioCommercialeEtatListFilter,'date_devis','date_entree')
     search_fields = ('client__nom', 'client__email', 'client__telephone', 'numero_devis')
     search_help_text = ("Rechercher un client")
