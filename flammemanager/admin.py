@@ -151,7 +151,7 @@ class PropositioCommercialeEtatListFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == 'rappele_en_attente_aux_aides':
-            return queryset.filter(statut__in=['envoye', 'rappel', 'auaide'])
+            return queryset.filter(statut__in=['attente', 'rappel', 'auaide'])
         if self.value() == 'envoye':
             return queryset.filter(statut__in=['envoye'])
         if self.value() == 'attente':
