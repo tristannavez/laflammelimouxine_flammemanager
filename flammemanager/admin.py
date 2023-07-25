@@ -132,16 +132,48 @@ class SoldeAdmin(admin.ModelAdmin):
     exclude = ('commande',)
 
 
+
+class PropositioCommercialeEtatListFilter(admin.SimpleListFilter):
+    title = 'Statut proposition'
+    parameter_name = 'statut'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('rappele_en_attente_aux_aides', 'Rappelé en attente ou aux aides'),
+            ('envoye', 'Envoyé'),
+            ('attente', 'En attente'),
+            ('rappel', 'Rappelé'),
+            ('auaide', 'Au aide'),
+            ('valide', 'Validé'),
+            ('perdu', 'Perdu'),
+
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'rappele_en_attente_aux_aides':
+            return queryset.filter(statut__in=['envoye', 'rappel', 'auaide'])
+        if self.value() == 'envoye':
+            return queryset.filter(statut__in=['envoye'])
+        if self.value() == 'attente':
+            return queryset.filter(statut__in=['attente'])
+        if self.value() == 'rappel':
+            return queryset.filter(statut__in=['rappel'])
+        if self.value() == 'auaide':
+            return queryset.filter(statut__in=['auaide'])
+        if self.value() == 'valide':
+            return queryset.filter(statut__in=['valide'])
+        if self.value() == 'perdu':
+            return queryset.filter(statut__in=['perdu'])
 class PropositionCommercialeAdmin(admin.ModelAdmin):
     list_display = ('client', 'date_devis', 'numero_devis', 'type_devis', 'montant_ht', 'statut', 'date_entree')
-    list_filter = ('statut',)
+    list_filter = (PropositioCommercialeEtatListFilter,'date_devis','date_entree')
     search_fields = ('client__nom', 'client__email', 'client__telephone', 'numero_devis')
     search_help_text = ("Rechercher un client")
     exclude = ('date_entree',)
 
 class EcheancierAdmin(admin.ModelAdmin):
-    list_display = ('client', 'date_facture', 'date_echeance', 'type_paiement', 'montant_total_ttc', 'montant_paye', 'statut')
-    list_filter = ('client', 'statut', 'date_facture', 'date_echeance', 'type_paiement', 'statut')
+    list_display = ('client', 'date_facture', 'date_echeance', 'type_paiement', 'montant_total_ttc', 'montant_paye', 'statut', 'commentaire')
+    list_filter = ('client', 'statut', 'date_facture', 'date_echeance', 'type_paiement')
     search_fields = ('client__nom', 'client__email', 'client__telephone')
 
 class AdminTheme(admin.ModelAdmin):
