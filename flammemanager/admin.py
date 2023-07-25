@@ -89,7 +89,7 @@ class ChantierAdmin(admin.ModelAdmin):
     '__str__', 'client', 'etat_chantier', 'nombre_de_jours', 'date_intervention', 'type_chantier', 'commentaire',
     'chantier_commencé', 'num_devis')
     list_filter = (ChantierEtatListFilter, 'nombre_de_jours', 'type_chantier', 'chantier_commencé', 'date_intervention')
-    search_fields = ('client__nom', 'client__email', 'client__telephone', 'num_devis')
+    search_fields = ('client__nom', 'client__email', 'client__telephone')
     search_help_text = ("Rechercher un client")
     exclude = ('livraisons',)
 
