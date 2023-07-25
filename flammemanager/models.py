@@ -104,7 +104,9 @@ class Echeancier(models.Model):
 
     STATUT_CHOICES = [
         ('virement', 'Virement'),
-        ('prelevement', 'Virement'),
+        ('prelevement', 'Prélèvement'),
+        ('cheque', 'Chèque'),
+        ('especes', 'Espèces'),
     ]
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     date_facture = models.DateField()
