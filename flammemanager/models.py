@@ -100,6 +100,7 @@ class PropositionCommerciale(models.Model):
     def __str__(self):
         return f"Proposition {self.numero_devis} - {self.client}"
 
+
 class Echeancier(models.Model):
 
     STATUT_CHOICES = [
