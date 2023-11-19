@@ -179,6 +179,7 @@ class EcheancierAdmin(admin.ModelAdmin):
 class AdminTheme(admin.ModelAdmin):
     list_display = ('name','active')
 
+admin_site.register(Clirent, ClirentAdmin)
 #admin_site.register(Client, ClientAdmin)
 #admin_site.register(Commande, CommandeAdmin)
 #admin_site.register(Livraison, LivraisonAdmin)
