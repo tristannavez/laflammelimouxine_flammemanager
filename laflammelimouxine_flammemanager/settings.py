@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "flammemanager",
+    "laflammelimouxine_flammemanager.flammemanager",
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
