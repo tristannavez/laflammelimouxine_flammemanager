@@ -2,7 +2,7 @@ asgiref==3.6.0
 dj-database-url==1.2.0
 django-admin-interface
 Django==4.1.13
-gunicorn==20.1.0
+gunicorn==22.0.0
 psycopg2-binary==2.9.5
 sqlparse==0.4.4
 whitenoise==6.3.0
