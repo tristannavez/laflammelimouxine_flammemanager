@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from admin_interface import *
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.admin import UserAdmin as UserAdmin
 from .models import Commande, Client, Produit, Livraison, Chantier, Solde, PropositionCommerciale, Echeancier
 
 admin_site = AdminSite(name='Mon Administration')
@@ -179,6 +180,11 @@ class EcheancierAdmin(admin.ModelAdmin):
 class AdminTheme(admin.ModelAdmin):
     list_display = ('name','active')
 
+class CustomUserAdmin(UserAdmin):
+    def save_model(self, request, obj, form, change):
+        if form.cleaned_data.get('password') and not obj.password.startswith('pbkdf2_'):
+            obj.set_password(form.cleaned_data['password'])
+        super().save_model(request, obj, form, change)
 
 admin_site.register(Client, ClientAdmin)
 admin_site.register(Commande, CommandeAdmin)
@@ -188,6 +194,6 @@ admin_site.register(Produit, ProduitAdmin)
 admin_site.register(Solde, SoldeAdmin)
 admin_site.register(PropositionCommerciale, PropositionCommercialeAdmin)
 admin_site.register(Echeancier, EcheancierAdmin)
-admin_site.register(User)
+admin_site.register(User, CustomUserAdmin)
 admin_site.register(Group)
 admin_site.register(admin_interface.models.Theme, AdminTheme)
