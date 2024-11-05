@@ -1,124 +1,143 @@
-# La Flamme Limouxine - FlammeManager
-Sample readme for minimal configuration to create and host a Django project at Heroku.
+# Flamme Manager
 
-## Create the project directory
-* mkdir directory_name
-* cd directory_name
+**Flamme Manager** est une application Django conçue pour la gestion des clients, commandes, chantiers, et autres opérations commerciales de l'entreprise **La Flamme Limouxine**.
 
-## Create and activate your virtuanenv
-* virtualenv -p python3 .vEnv
-* . .vEnv/bin/activate
+## Table des matières
 
-## Installing django
-* pip install django
+- [Prérequis](#prérequis)
+- [Installation](#installation)
+- [Modèles de données](#modèles-de-données)
+  - [Client](#client)
+  - [Produit](#produit)
+  - [Commande](#commande)
+  - [Livraison](#livraison)
+  - [Chantier](#chantier)
+  - [Solde](#solde)
+  - [PropositionCommerciale](#propositioncommerciale)
+  - [Echeancier](#echeancier)
+- [Fonctionnalités](#fonctionnalités)
+- [Déploiement en production](#déploiement-en-production)
+- [Utilisation](#utilisation)
 
-## Create the django project
-* django-admin startproject myproject
+## Prérequis
 
-## Creating the Git repository
-* git init 
-* Create a file called `.gitignore` with the following content:
-```
-# See the name for you IDE
-.idea
-# If you are using sqlite3
-*.sqlite3
-# Name of your virtuan env
-.vEnv
-*pyc
-```
-* git add .
-* git commit -m 'First commit'
+- **Python 3.9.16** (ou version compatible)
+- **Django** (version compatible avec Python 3.9.16)
 
-## Hidding instance configuration
-* pip install python-decouple
-* create an .env file at the root path and insert the following variables
-- SECRET_KEY=Your$eCretKeyHere (Get this secrety key from the settings.py)
-- DEBUG=True
+Assurez-vous d’avoir un environnement virtuel configuré et les dépendances installées pour éviter les conflits de versions.
 
-### Settings.py
-* from decouple import config
-* SECRET_KEY = config('SECRET_KEY')
-* DEBUG = config('DEBUG', default=False, cast=bool)
+## Installation
 
-## Configuring the Data Base (You don't need that if you already had an database).
-* pip install dj-database-url
+1. Clonez ce dépôt :
 
-### Settings.py
-* from dj_database_url import parse as dburl
+    ```bash
+    git clone https://github.com/username/flamme-manager.git
+    cd flamme-manager
+    ```
 
-default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+2. Installez les dépendances requises dans un environnement virtuel :
 
-DATABASES = {
-    'default': config('DATABASE_URL', default=default_dburl, cast=dburl),
-}
+    ```bash
+    python -m venv env
+    source env/bin/activate   # Sur Linux/macOS
+    env\Scripts\activate      # Sur Windows
+    pip install -r requirements.txt
+    ```
 
+3. Configurez les paramètres de base de données et autres configurations dans `settings.py`.
 
-## Static files 
-pip install dj-static
+4. Exécutez les migrations pour initialiser la base de données :
 
-### wsgi 
-* from dj_static import Cling
-* application = Cling(get_wsgi_application())
-* Also don't forget to check "DJANGO_SETTINGS_MODULE". It is prone to frequent mistakes.
+    ```bash
+    python manage.py migrate
+    ```
 
-### Settings.py
-* STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+5. Créez un superutilisateur pour accéder à l’interface Django admin :
 
-## Create a requirements-dev.txt
-pip freeze > requirements-dev.txt
+    ```bash
+    python manage.py createsuperuser
+    ```
 
-## Create a file requirements.txt file and include reference to previows file and add two more requirements
-* -r requirements-dev.txt
-* gunicorn
-* psycopg2
+6. Lancez le serveur de développement :
 
-## Create a file Procfile and add the following code
-* web: gunicorn project.wsgi
-* You can check in django website or heroku website for more information:
-https://docs.djangoproject.com/en/2.2/howto/deployment/wsgi/gunicorn/
-https://devcenter.heroku.com/articles/django-app-configuration
+    ```bash
+    python manage.py runserver
+    ```
 
-## Create a file runtime.txt and add the following core
-* python-3.6.0 (You can currently use "python-3.7.3")
+7. Accédez à l’application à `http://127.0.0.1:8000/`.
 
-## Creating the app at Heroku
-You should install heroku CLI tools in your computer previously ( See http://bit.ly/2jCgJYW ) 
-* heroku apps:create app-name (you can create by heroku it's self if you wanted.)
-You can also login in heroku by: heroku login
-Remember to grab the address of the app in this point
+## Modèles de données
 
-## Setting the allowed hosts
-* include your address at the ALLOWED_HOSTS directives in settings.py - Just the domain, make sure that you will take the protocol and slashes from the string
+Voici les modèles principaux définis pour **Flamme Manager** :
 
-## Heroku install config plugin
-* heroku plugins:install heroku-config
+### Client
 
-### Sending configs from .env to Heroku ( You have to be inside tha folther where .env files is)
-* heroku plugins:install heroku-config
-* heroku config:push -a
+Modèle de base pour stocker les informations client.
 
-### To show heroku configs do
-* heroku config 
-(check this, if you fail changing by code, try changing by heroku dashboard)
+- **Champs** : nom, adresse, email, téléphone
+- **Représentation** : Nom du client
 
-## Publishing the app
-* git add .
-* git commit -m 'Configuring the app'
-* git push heroku master --force (you don't need "--force")
+### Produit
 
-## Creating the data base (if you are using your own data base you don't need it, if was migrated there)
-* heroku run python3 manage.py migrate
+Modèle pour définir les produits vendus.
 
-## Creating the Django admin user
-* heroku run python3 manage.py createsuperuser (the same as above)
+- **Champs** : nom, fournisseur
+- **Représentation** : Nom du produit
 
-## EXTRAS
-### You may need to disable the collectstatic
-* heroku config:set DISABLE_COLLECTSTATIC=1
+### Commande
 
-### Also recommend set this configuration to your heroku settings
-* WEB_CONCURRENCY = 3
+Modèle de commande associé à un client et à un ou plusieurs produits.
 
-### Changing a specific configuration
-* heroku config:set DEBUG=True
+- **Champs** : client, produits, prix_achat_ht, prix_vente_ht, etat_commande, date_entree, num_devis, commentaire
+- **Représentation** : Détails de la commande et du client
+
+### Livraison
+
+Modèle pour gérer les livraisons des commandes clients.
+
+- **Champs** : client, commande, etat_livraison, date_commande
+- **Méthodes** : `num_devis()`, `commentaire()`
+- **Représentation** : Détails de la livraison et du client
+
+### Chantier
+
+Modèle pour gérer les chantiers associés aux livraisons.
+
+- **Champs** : livraisons, client, etat_chantier, nombre_de_jours, date_intervention, type_chantier, commentaire, chantier_commencé
+- **Méthodes** : `num_devis()`
+- **Représentation** : Détails du chantier et du client
+
+### Solde
+
+Modèle pour gérer les soldes associés aux chantiers.
+
+- **Champs** : chantier, commande, client, etat_solde, id_facture, prix_facture_ht, date_solde
+- **Méthodes** : `num_devis()`
+- **Représentation** : Solde associé au chantier
+
+### PropositionCommerciale
+
+Modèle pour créer des propositions commerciales pour les clients.
+
+- **Champs** : client, date_devis, numero_devis, type_devis, marque, montant_ht, statut, commentaire, date_entree
+- **Représentation** : Proposition et numéro de devis du client
+
+### Echeancier
+
+Modèle pour gérer les échéanciers de paiement.
+
+- **Champs** : client, date_facture, date_echeance, type_paiement, montant_total_ttc, montant_paye, statut, commentaire
+- **Représentation** : Échéancier pour le client
+
+## Fonctionnalités
+
+- Gestion des clients, produits, commandes, livraisons, chantiers, soldes, propositions commerciales et échéanciers avec des règles de gestion pour ajouter automatiquement des données.
+- Vue d’administration Django pour gérer facilement les différents modèles.
+
+## Déploiement en production
+
+La branche **main** est déployée en production via Heroku. Les modifications poussées sur cette branche seront automatiquement prises en compte et mises à jour dans l'application en production.
+
+## Utilisation
+
+L'application s’utilise principalement via l'interface d'administration Django. Connectez-vous en tant que superutilisateur pour accéder à toutes les sections et gérer les données.
